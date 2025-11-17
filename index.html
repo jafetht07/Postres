@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Gestión de Postres</title>
+    <style>
+        /* (Estilos preservados y limpios) */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg,#667eea 0%,#764ba2 100%); min-height:100vh; }
+        .container { max-width:1200px; margin:0 auto; padding:20px; }
+        .login-container { display:flex; justify-content:center; align-items:center; min-height:100vh; }
+        .login-box { background:white; padding:40px; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.3); width:100%; max-width:400px; }
+        .login-box h2 { color:#667eea; margin-bottom:30px; text-align:center; }
+        .input-group { margin-bottom:20px; }
+        .input-group label { display:block; margin-bottom:5px; color:#333; font-weight:500; }
+        .input-group input, .input-group select { width:100%; padding:12px; border:2px solid #e0e0e0; border-radius:8px; font-size:14px; transition:border-color .3s; }
+        .input-group input:focus, .input-group select:focus { outline:none; border-color:#667eea; }
+        .btn { width:100%; padding:12px; background:#667eea; color:white; border:none; border-radius:8px; font-size:16px; font-weight:600; cursor:pointer; transition:background .3s; }
+        .btn:hover { background:#5568d3; }
+        .btn-secondary { background:#6c757d; margin-top:10px; }
+        .btn-secondary:hover { background:#5a6268; }
+        .app-container { display:none; }
+        .header { background:white; padding:20px; border-radius:15px; margin-bottom:20px; box-shadow:0 5px 15px rgba(0,0,0,0.1); display:flex; justify-content:space-between; align-items:center; }
+        .header h1 { color:#667eea; }
+        .logout-btn { padding:10px 20px; background:#dc3545; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:600; }
+        .tabs { display:flex; gap:10px; margin-bottom:20px; }
+        .tab { flex:1; padding:15px; background:white; border:none; border-radius:10px; cursor:pointer; font-size:16px; font-weight:600; transition:all .3s; box-shadow:0 3px 10px rgba(0,0,0,0.1); }
+        .tab.active { background:#667eea; color:white; }
+        .tab-content { display:none; background:white; padding:25px; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,0.1); }
+        .tab-content.active { display:block; }
+        .form-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:15px; margin-bottom:20px; }
+        .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:15px; margin-bottom:30px; }
+        .stat-card { background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; padding:20px; border-radius:10px; box-shadow:0 3px 10px rgba(0,0,0,0.1); }
+        .stat-card h3 { font-size:14px; margin-bottom:10px; opacity:0.9; }
+        .stat-card .value { font-size:28px; font-weight:bold; }
+        table { width:100%; border-collapse:collapse; margin-top:20px; }
+        th, td { padding:12px; text-align:left; border-bottom:1px solid #e0e0e0; }
+        th { background:#f8f9fa; font-weight:600; color:#333; }
+        .delete-btn { background:#dc3545; color:white; border:none; padding:5px 12px; border-radius:5px; cursor:pointer; font-size:12px; }
+        .delete-btn:hover { background:#c82333; }
+        .alert { padding:12px; border-radius:8px; margin-bottom:20px; display:none; }
+        .alert-success { background:#d4edda; color:#155724; border:1px solid #c3e6cb; }
+        .alert-error { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; }
+        .hidden { display:none; }
+        .loading { text-align:center; padding:20px; color:#666; }
+        .error-box { background:#fff3cd; border:2px solid #ffc107; padding:15px; border-radius:8px; margin:20px 0; }
+        .error-box h4 { color:#856404; margin-bottom:10px; }
+        .error-box code { display:block; background:#fff; padding:10px; border-radius:4px; margin-top:10px; font-size:12px; overflow-x:auto; }
+    </style>
+</head>
+<body>
+    <!-- LOGIN -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <h2>🍰 Mi Emprendimiento de Postres</h2>
+            <div id="loginAlert" class="alert"></div>
+            <div class="input-group">
+                <label>Correo Electrónico</label>
+                <input type="email" id="loginEmail" placeholder="tu@email.com" />
+            </div>
+            <div class="input-group">
+                <label>Contraseña</label>
+                <input type="password" id="loginPassword" placeholder="••••••••" />
+            </div>
+            <button class="btn" onclick="login()">Iniciar Sesión</button>
+            <button class="btn btn-secondary" onclick="showRegister()">Registrarse</button>
+        </div>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="registerScreen" class="login-container hidden">
+        <div class="login-box">
+            <h2>Crear Cuenta</h2>
+            <div id="registerAlert" class="alert"></div>
+            <div class="input-group">
+                <label>Correo Electrónico</label>
+                <input type="email" id="registerEmail" placeholder="tu@email.com" />
+            </div>
+            <div class="input-group">
+                <label>Contraseña</label>
+                <input type="password" id="registerPassword" placeholder="Mínimo 6 caracteres" />
+            </div>
+            <button class="btn" onclick="register()">Crear Cuenta</button>
+            <button class="btn btn-secondary" onclick="showLogin()">Volver al Login</button>
+        </div>
+    </div>
+
+    <!-- APP -->
+    <div id="appScreen" class="app-container">
+        <div class="container">
+            <div class="header">
+                <h1>🍰 Gestión de Postres</h1>
+                <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+            </div>
+
+            <div id="errorContainer"></div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab(event,'cuentas')">📊 Cuentas</button>
+                <button class="tab" onclick="switchTab(event,'pedidos')">📦 Pedidos</button>
+            </div>
+
+            <div id="cuentasTab" class="tab-content active">
+                <h2>Gestión de Cuentas</h2>
+
+                <div class="input-group">
+                    <label>Ver estadísticas por: </label>
+                    <select id="periodSelect" onchange="updateStats()">
+                        <option value="day">Hoy</option>
+                        <option value="week">Esta Semana</option>
+                        <option value="month">Este Mes</option>
+                    </select>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Ingresos</h3>
+                        <div class="value" id="totalIngresos">₡0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Gastos</h3>
+                        <div class="value" id="totalGastos">₡0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Ganancia</h3>
+                        <div class="value" id="totalGanancia">₡0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Margen</h3>
+                        <div class="value" id="margen">0%</div>
+                    </div>
+                </div>
+
+                <h3>Registrar Gasto</h3>
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Concepto</label>
+                        <input type="text" id="gastoConcepto" placeholder="Ej: Ingredientes, Envases, Transporte" />
+                    </div>
+                    <div class="input-group">
+                        <label>Monto (₡)</label>
+                        <input type="number" id="gastoMonto" placeholder="0" min="0" />
+                    </div>
+                </div>
+                <button class="btn" onclick="registrarGasto()">💰 Registrar Gasto</button>
+
+                <h3 style="margin-top:30px;">Historial de Gastos</h3>
+                <table>
+                    <thead>
+                        <tr><th>Fecha</th><th>Concepto</th><th>Monto</th><th>Acción</th></tr>
+                    </thead>
+                    <tbody id="gastosTable"><tr><td colspan="4" class="loading">Cargando...</td></tr></tbody>
+                </table>
+
+                <h3 style="margin-top:30px;">Historial de Ingresos (Pedidos)</h3>
+                <table>
+                    <thead>
+                        <tr><th>Fecha</th><th>Cliente</th><th>Monto</th></tr>
+                    </thead>
+                    <tbody id="ingresosTable"><tr><td colspan="3" class="loading">Cargando...</td></tr></tbody>
+                </table>
+            </div>
+
+            <div id="pedidosTab" class="tab-content">
+                <h2>Gestión de Pedidos</h2>
+
+                <h3>Nuevo Pedido</h3>
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Nombre del Cliente</label>
+                        <input type="text" id="clienteNombre" placeholder="Juan Pérez" />
+                    </div>
+                    <div class="input-group">
+                        <label>Teléfono</label>
+                        <input type="tel" id="clienteTelefono" placeholder="8888-8888" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Postre</label>
+                        <input type="text" id="postreNombre" placeholder="Cheesecake de fresa" />
+                    </div>
+                    <div class="input-group">
+                        <label>Precio (₡)</label>
+                        <input type="number" id="postrePrecio" placeholder="0" min="0" />
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Ruta de Entrega</label>
+                    <input type="text" id="rutaEntrega" placeholder="Dirección completa" />
+                </div>
+                <div class="input-group">
+                    <label>Fecha de Entrega</label>
+                    <input type="date" id="fechaEntrega" />
+                </div>
+                <button class="btn" onclick="registrarPedido()">📦 Registrar Pedido</button>
+
+                <h3 style="margin-top:30px;">Pedidos Activos</h3>
+                <table>
+                    <thead>
+                        <tr><th>Cliente</th><th>Teléfono</th><th>Postre</th><th>Precio</th><th>Entrega</th><th>Ruta</th><th>Acción</th></tr>
+                    </thead>
+                    <tbody id="pedidosTable"><tr><td colspan="7" class="loading">Cargando...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where, orderBy, Timestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDjwYd8J_9g7kfgluxZFWMKKOn2OoBkmBQ",
+            authDomain: "postres-app-86dac.firebaseapp.com",
+            projectId: "postres-app-86dac",
+            storageBucket: "postres-app-86dac.firebasestorage.app",
+            messagingSenderId: "353099071108",
+            appId: "1:353099071108:web:88b2d032e4a2400d2a0cd1"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.currentUser = null;
+
+        function showErrorHelper(error) {
+            const errorContainer = document.getElementById('errorContainer');
+            if (!error) { errorContainer.innerHTML = ''; return; }
+
+            if (error.code === 'permission-denied') {
+                errorContainer.innerHTML = `
+                    <div class="error-box">
+                        <h4>🔒 Error de Permisos de Firestore</h4>
+                        <p>Las reglas de seguridad están bloqueando el acceso. Sigue estos pasos:</p>
+                        <ol>
+                            <li>Ve a la <a href="https://console.firebase.google.com" target="_blank">Consola de Firebase</a></li>
+                            <li>Selecciona tu proyecto: <strong>postres-app-86dac</strong></li>
+                            <li>Ve a <strong>Firestore Database</strong> → <strong>Reglas</strong></li>
+                            <li>Copia y pega estas reglas:</li>
+                        </ol>
+                        <code>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}</code>
+                        <p style="margin-top:10px;">Luego haz clic en <strong>Publicar</strong> y recarga esta página.</p>
+                    </div>`;
+            } else if (error.code === 'failed-precondition' || (error.message && error.message.includes('index'))) {
+                const indexUrl = error.message ? error.message.match(/https:\/\/[^\s]+/) : null;
+                errorContainer.innerHTML = `
+                    <div class="error-box">
+                        <h4>📋 Falta Crear Índice en Firestore</h4>
+                        <p>Firebase necesita un índice para esta consulta.</p>
+                        ${indexUrl ? `<p><a href="${indexUrl[0]}" target="_blank" style="color:#667eea; font-weight:bold;">👉 Haz clic aquí para crear el índice</a></p>` : ''}
+                        <p>Después de crear el índice, espera 1-2 minutos y recarga la página.</p>
+                    </div>`;
+            } else {
+                errorContainer.innerHTML = `<div class="error-box"><h4>Error</h4><p>${error.message || error}</p></div>`;
+            }
+        }
+
+        // Auth state
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.currentUser = user;
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('registerScreen').style.display = 'none';
+                document.getElementById('appScreen').style.display = 'block';
+                loadData();
+            } else {
+                window.currentUser = null;
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('appScreen').style.display = 'none';
+            }
+        });
+
+        window.showRegister = () => {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('registerScreen').style.display = 'flex';
+        };
+
+        window.showLogin = () => {
+            document.getElementById('registerScreen').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'flex';
+        };
+
+        window.register = async () => {
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            if (!email || !password) { showAlert('registerAlert','Por favor completa todos los campos','error'); return; }
+            if (password.length < 6) { showAlert('registerAlert','La contraseña debe tener al menos 6 caracteres','error'); return; }
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+                showAlert('registerAlert','✅ Cuenta creada exitosamente','success');
+            } catch (error) {
+                console.error('Error de registro:', error);
+                let mensaje = 'Error al crear cuenta';
+                if (error.code === 'auth/email-already-in-use') mensaje = 'Este correo ya está registrado';
+                else if (error.code === 'auth/invalid-email') mensaje = 'Correo electrónico inválido';
+                else if (error.code === 'auth/weak-password') mensaje = 'La contraseña es muy débil';
+                showAlert('registerAlert', mensaje, 'error');
+            }
+        };
+
+        window.login = async () => {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            if (!email || !password) { showAlert('loginAlert','Por favor completa todos los campos','error'); return; }
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                console.error('Error de login:', error);
+                let mensaje = 'Error al iniciar sesión';
+                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') mensaje = 'Correo o contraseña incorrectos';
+                else if (error.code === 'auth/invalid-email') mensaje = 'Correo electrónico inválido';
+                showAlert('loginAlert', mensaje, 'error');
+            }
+        };
+
+        window.logout = async () => {
+            await signOut(auth);
+        };
+
+        function showAlert(elementId, message, type) {
+            const alertDiv = document.getElementById(elementId);
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            alertDiv.style.display = 'block';
+            setTimeout(() => alertDiv.style.display = 'none', 4000);
+        }
+
+        // Fix: accept event param to avoid undefined global event
+        window.switchTab = (evt, tab) => {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            if (evt && evt.currentTarget) evt.currentTarget.classList.add('active');
+            document.getElementById(tab + 'Tab').classList.add('active');
+            if (tab === 'cuentas') updateStats();
+        };
+
+        // Registrar gasto
+        window.registrarGasto = async () => {
+            const concepto = document.getElementById('gastoConcepto').value.trim();
+            const monto = parseFloat(document.getElementById('gastoMonto').value);
+            if (!concepto || !monto || monto <= 0) { alert('⚠️ Por favor completa todos los campos correctamente'); return; }
+
+            try {
+                const gastoData = {
+                    userId: window.currentUser.uid,
+                    concepto,
+                    monto,
+                    fecha: Timestamp.now(),
+                    timestamp: Date.now()
+                };
+                const docRef = await addDoc(collection(db, 'gastos'), gastoData);
+                document.getElementById('gastoConcepto').value = '';
+                document.getElementById('gastoMonto').value = '';
+                await loadGastos();
+                await updateStats();
+                alert(`✅ Gasto registrado exitosamente\n💰 Monto: ₡${monto.toLocaleString()}\n📝 Concepto: ${concepto}`);
+            } catch (error) {
+                console.error('❌ Error al registrar gasto:', error);
+                showErrorHelper(error);
+                let mensaje = 'Error al registrar gasto';
+                if (error.code === 'permission-denied') mensaje = '🔒 Error de permisos. Revisa el cuadro amarillo arriba con las instrucciones.';
+                alert(mensaje);
+            }
+        };
+
+        // Registrar pedido + crear ingreso
+        window.registrarPedido = async () => {
+            const nombre = document.getElementById('clienteNombre').value.trim();
+            const telefono = document.getElementById('clienteTelefono').value.trim();
+            const postre = document.getElementById('postreNombre').value.trim();
+            const precio = parseFloat(document.getElementById('postrePrecio').value);
+            const ruta = document.getElementById('rutaEntrega').value.trim();
+            const fechaEntrega = document.getElementById('fechaEntrega').value;
+            if (!nombre || !telefono || !postre || !precio || !ruta || !fechaEntrega || precio <= 0) { alert('⚠️ Por favor completa todos los campos correctamente'); return; }
+
+            try {
+                const pedidoData = {
+                    userId: window.currentUser.uid,
+                    nombre, telefono, postre, precio, ruta, fechaEntrega,
+                    fecha: Timestamp.now(),
+                    timestamp: Date.now()
+                };
+                await addDoc(collection(db, 'pedidos'), pedidoData);
+
+                const ingresoData = {
+                    userId: window.currentUser.uid,
+                    cliente: nombre,
+                    monto: precio,
+                    fecha: Timestamp.now(),
+                    timestamp: Date.now()
+                };
+                await addDoc(collection(db, 'ingresos'), ingresoData);
+
+                document.getElementById('clienteNombre').value = '';
+                document.getElementById('clienteTelefono').value = '';
+                document.getElementById('postreNombre').value = '';
+                document.getElementById('postrePrecio').value = '';
+                document.getElementById('rutaEntrega').value = '';
+                document.getElementById('fechaEntrega').value = '';
+
+                await loadPedidos();
+                await loadIngresos();
+                await updateStats();
+
+                alert(`✅ Pedido registrado exitosamente\n👤 Cliente: ${nombre}\n🍰 Postre: ${postre}\n💰 Precio: ₡${precio.toLocaleString()}`);
+            } catch (error) {
+                console.error('❌ Error al registrar pedido:', error);
+                showErrorHelper(error);
+                alert('Error al registrar pedido. Revisa la consola y el cuadro amarillo arriba.');
+            }
+        };
+
+        window.eliminarGasto = async (id) => {
+            if (!confirm('¿Estás seguro de eliminar este gasto?')) return;
+            try {
+                await deleteDoc(doc(db, 'gastos', id));
+                await loadGastos();
+                await updateStats();
+                alert('✅ Gasto eliminado');
+            } catch (error) {
+                console.error('Error al eliminar gasto:', error);
+                alert('Error al eliminar: ' + (error.message || error));
+            }
+        };
+
+        window.eliminarPedido = async (id) => {
+            if (!confirm('¿Marcar este pedido como completado?')) return;
+            try {
+                await deleteDoc(doc(db, 'pedidos', id));
+                await loadPedidos();
+                alert('✅ Pedido completado');
+            } catch (error) {
+                console.error('Error al completar pedido:', error);
+                alert('Error al completar: ' + (error.message || error));
+            }
+        };
+
+        // Carga inicial
+        async function loadData() {
+            try {
+                await Promise.all([loadGastos(), loadPedidos(), loadIngresos()]);
+                await updateStats();
+            } catch (err) {
+                console.error('Error cargando datos iniciales:', err);
+            }
+        }
+
+        // Helper: convertir campo fecha (Timestamp|number|missing) a Date
+        function toDateSafe(field) {
+            if (!field) return null;
+            // Firestore Timestamp
+            if (typeof field.toDate === 'function') return field.toDate();
+            // number (ms)
+            if (typeof field === 'number') return new Date(field);
+            // string date
+            const d = new Date(field);
+            return isNaN(d.getTime()) ? null : d;
+        }
+
+        // loadGastos
+        async function loadGastos() {
+            try {
+                const table = document.getElementById('gastosTable');
+                table.innerHTML = '<tr><td colspan="4" class="loading">Cargando...</td></tr>';
+
+                let snapshot;
+                try {
+                    const q = query(collection(db, 'gastos'), where('userId', '==', window.currentUser.uid), orderBy('timestamp', 'desc'));
+                    snapshot = await getDocs(q);
+                } catch (err) {
+                    // índice faltante u otro; intentar sin orderBy
+                    console.warn('OrderBy falló para gastos, cargando sin ordenar.', err);
+                    showErrorHelper(err);
+                    const q = query(collection(db, 'gastos'), where('userId', '==', window.currentUser.uid));
+                    snapshot = await getDocs(q);
+                }
+
+                table.innerHTML = '';
+                if (!snapshot || snapshot.empty) {
+                    table.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:#999;">📝 No hay gastos registrados. ¡Empieza a registrar tus gastos arriba!</td></tr>';
+                    return;
+                }
+
+                const gastos = [];
+                snapshot.forEach(s => gastos.push({ id: s.id, ...s.data() }));
+                // ordenar manualmente por timestamp descendente por seguridad
+                gastos.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+                gastos.forEach(g => {
+                    const fechaDate = toDateSafe(g.fecha) || new Date(g.timestamp || Date.now());
+                    const row = table.insertRow();
+                    row.innerHTML = `
+                        <td>${fechaDate.toLocaleDateString('es-CR')}</td>
+                        <td>${g.concepto || ''}</td>
+                        <td style="font-weight:600;">₡${Number(g.monto || 0).toLocaleString('es-CR')}</td>
+                        <td><button class="delete-btn" onclick="eliminarGasto('${g.id}')">🗑️ Eliminar</button></td>
+                    `;
+                });
+            } catch (error) {
+                console.error('❌ Error al cargar gastos:', error);
+                showErrorHelper(error);
+                const table = document.getElementById('gastosTable');
+                table.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#dc3545;padding:20px;">Error al cargar gastos. Verifica el cuadro amarillo arriba.</td></tr>';
+            }
+        }
+
+        // loadPedidos
+        async function loadPedidos() {
+            try {
+                const table = document.getElementById('pedidosTable');
+                table.innerHTML = '<tr><td colspan="7" class="loading">Cargando...</td></tr>';
+
+                let snapshot;
+                try {
+                    const q = query(collection(db, 'pedidos'), where('userId', '==', window.currentUser.uid), orderBy('timestamp', 'desc'));
+                    snapshot = await getDocs(q);
+                } catch (err) {
+                    console.warn('OrderBy falló para pedidos, cargando sin ordenar.', err);
+                    showErrorHelper(err);
+                    const q = query(collection(db, 'pedidos'), where('userId', '==', window.currentUser.uid));
+                    snapshot = await getDocs(q);
+                }
+
+                table.innerHTML = '';
+                if (!snapshot || snapshot.empty) {
+                    table.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#999;">📦 No hay pedidos pendientes</td></tr>';
+                    return;
+                }
+
+                const pedidos = [];
+                snapshot.forEach(s => pedidos.push({ id: s.id, ...s.data() }));
+
+                // ordenar por fechaEntrega (si la hay)
+                pedidos.sort((a, b) => {
+                    const da = a.fechaEntrega ? new Date(a.fechaEntrega) : new Date(0);
+                    const dbDate = b.fechaEntrega ? new Date(b.fechaEntrega) : new Date(0);
+                    return da - dbDate;
+                });
+
+                pedidos.forEach(p => {
+                    const fechaEntrega = p.fechaEntrega ? new Date(p.fechaEntrega).toLocaleDateString('es-CR') : '-';
+                    const row = table.insertRow();
+                    row.innerHTML = `
+                        <td>${p.nombre || ''}</td>
+                        <td>${p.telefono || ''}</td>
+                        <td>${p.postre || ''}</td>
+                        <td style="font-weight:600;">₡${Number(p.precio || 0).toLocaleString('es-CR')}</td>
+                        <td>${fechaEntrega}</td>
+                        <td>${p.ruta || ''}</td>
+                        <td><button class="delete-btn" onclick="eliminarPedido('${p.id}')">✅ Completar</button></td>
+                    `;
+                });
+            } catch (error) {
+                console.error('❌ Error al cargar pedidos:', error);
+                showErrorHelper(error);
+                const table = document.getElementById('pedidosTable');
+                table.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#dc3545;padding:20px;">Error al cargar pedidos. Verifica el cuadro amarillo arriba.</td></tr>';
+            }
+        }
+
+        // loadIngresos
+        async function loadIngresos() {
+            try {
+                const table = document.getElementById('ingresosTable');
+                table.innerHTML = '<tr><td colspan="3" class="loading">Cargando...</td></tr>';
+
+                let snapshot;
+                try {
+                    const q = query(collection(db, 'ingresos'), where('userId', '==', window.currentUser.uid), orderBy('timestamp', 'desc'));
+                    snapshot = await getDocs(q);
+                } catch (err) {
+                    console.warn('OrderBy falló para ingresos, cargando sin ordenar.', err);
+                    showErrorHelper(err);
+                    const q = query(collection(db, 'ingresos'), where('userId', '==', window.currentUser.uid));
+                    snapshot = await getDocs(q);
+                }
+
+                table.innerHTML = '';
+                if (!snapshot || snapshot.empty) {
+                    table.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:20px;color:#999;">💰 No hay ingresos registrados</td></tr>';
+                    return;
+                }
+
+                const ingresos = [];
+                snapshot.forEach(s => ingresos.push({ id: s.id, ...s.data() }));
+                ingresos.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+                ingresos.forEach(i => {
+                    const fechaDate = toDateSafe(i.fecha) || new Date(i.timestamp || Date.now());
+                    const row = table.insertRow();
+                    row.innerHTML = `
+                        <td>${fechaDate.toLocaleDateString('es-CR')}</td>
+                        <td>${i.cliente || ''}</td>
+                        <td style="font-weight:600;color:#28a745;">₡${Number(i.monto || 0).toLocaleString('es-CR')}</td>
+                    `;
+                });
+            } catch (error) {
+                console.error('❌ Error al cargar ingresos:', error);
+                showErrorHelper(error);
+                const table = document.getElementById('ingresosTable');
+                table.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#dc3545;padding:20px;">Error al cargar ingresos.</td></tr>';
+            }
+        }
+
+        // updateStats: calcula totales según periodo (day/week/month)
+        window.updateStats = async () => {
+            if (!window.currentUser) return;
+            const period = document.getElementById('periodSelect').value;
+            const now = new Date();
+            let startDate;
+
+            if (period === 'day') {
+                startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+            } else if (period === 'week') {
+                // Semana: lunes como inicio
+                const day = now.getDay(); // 0 (domingo) .. 6 (sábado)
+                const diffToMonday = (day === 0) ? -6 : (1 - day); // si es domingo, retrocede 6 días
+                startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diffToMonday, 0, 0, 0, 0);
+            } else { // month
+                startDate = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
+            }
+
+            const startTs = startDate.getTime();
+
+            try {
+                // Gastos
+                let totalGastos = 0;
+                const gastosQ = query(collection(db, 'gastos'), where('userId', '==', window.currentUser.uid));
+                const gastosSnap = await getDocs(gastosQ);
+                gastosSnap.forEach(s => {
+                    const data = s.data();
+                    const fecha = toDateSafe(data.fecha) || (typeof data.timestamp === 'number' ? new Date(data.timestamp) : null);
+                    if (fecha && fecha.getTime() >= startTs) totalGastos += Number(data.monto || 0);
+                });
+
+                // Ingresos
+                let totalIngresos = 0;
+                const ingresosQ = query(collection(db, 'ingresos'), where('userId', '==', window.currentUser.uid));
+                const ingresosSnap = await getDocs(ingresosQ);
+                ingresosSnap.forEach(s => {
+                    const data = s.data();
+                    const fecha = toDateSafe(data.fecha) || (typeof data.timestamp === 'number' ? new Date(data.timestamp) : null);
+                    if (fecha && fecha.getTime() >= startTs) totalIngresos += Number(data.monto || 0);
+                });
+
+                const ganancia = totalIngresos - totalGastos;
+                const margen = totalIngresos > 0 ? ((ganancia / totalIngresos) * 100).toFixed(1) : 0;
+
+                document.getElementById('totalIngresos').textContent = '₡' + totalIngresos.toLocaleString('es-CR');
+                document.getElementById('totalGastos').textContent = '₡' + totalGastos.toLocaleString('es-CR');
+                document.getElementById('totalGanancia').textContent = '₡' + ganancia.toLocaleString('es-CR');
+                document.getElementById('margen').textContent = margen + '%';
+
+                console.log('📊 Estadísticas actualizadas:', { totalIngresos, totalGastos, ganancia, margen: margen + '%' });
+            } catch (error) {
+                console.error('❌ Error al actualizar estadísticas:', error);
+                showErrorHelper(error);
+            }
+        };
+    </script>
+</body>
+</html>
