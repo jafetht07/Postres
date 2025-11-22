@@ -35,19 +35,19 @@
         .stat-card { background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; padding:15px; border-radius:10px; box-shadow:0 3px 10px rgba(0,0,0,0.1); }
         .stat-card h3 { font-size:12px; margin-bottom:8px; opacity:0.9; }
         .stat-card .value { font-size:22px; font-weight:bold; }
-        table { width:100%; border-collapse:collapse; margin-top:15px; font-size:12px; }
+        table { width:100%; border-collapse:collapse; margin-top:15px; font-size:11px; }
         thead { display:table; width:100%; table-layout:fixed; }
         tbody { display:table; width:100%; table-layout:fixed; }
-        th, td { padding:8px 4px; text-align:left; border-bottom:1px solid #e0e0e0; word-wrap:break-word; vertical-align:middle; line-height:1.3; }
-        th { background:#f8f9fa; font-weight:600; color:#333; font-size:11px; }
-        .delete-btn { background:#dc3545; color:white; border:none; padding:5px 8px; border-radius:5px; cursor:pointer; font-size:10px; white-space:nowrap; display:inline-block; margin:1px; }
+        th, td { padding:8px 3px; text-align:left; border-bottom:1px solid #e0e0e0; word-wrap:break-word; vertical-align:middle; line-height:1.2; height:auto; }
+        th { background:#f8f9fa; font-weight:600; color:#333; font-size:10px; }
+        .delete-btn { background:#dc3545; color:white; border:none; padding:4px 6px; border-radius:4px; cursor:pointer; font-size:9px; white-space:nowrap; display:inline-block; margin:1px; line-height:1.2; }
         .delete-btn:hover { background:#c82333; }
-        .edit-btn { background:#ffc107; color:#333; border:none; padding:5px 8px; border-radius:5px; cursor:pointer; font-size:10px; margin-right:2px; white-space:nowrap; display:inline-block; margin:1px; }
+        .edit-btn { background:#ffc107; color:#333; border:none; padding:4px 6px; border-radius:4px; cursor:pointer; font-size:9px; margin-right:2px; white-space:nowrap; display:inline-block; margin:1px; line-height:1.2; }
         .edit-btn:hover { background:#e0a800; }
-        .status-ok { color:#28a745; font-weight:600; font-size:11px; }
-        .status-low { color:#dc3545; font-weight:600; font-size:11px; }
+        .status-ok { color:#28a745; font-weight:600; font-size:10px; display:inline-block; }
+        .status-low { color:#dc3545; font-weight:600; font-size:10px; display:inline-block; }
         .item-comprado { text-decoration: line-through; opacity:0.6; background:#f0f0f0; }
-        .checkbox-compra { width:18px; height:18px; cursor:pointer; }
+        .checkbox-compra { width:16px; height:16px; cursor:pointer; vertical-align:middle; }
         .alert { padding:12px; border-radius:8px; margin-bottom:15px; display:none; font-size:14px; }
         .alert-success { background:#d4edda; color:#155724; border:1px solid #c3e6cb; }
         .alert-error { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; }
@@ -77,18 +77,21 @@
             th { font-size:12px; }
             .delete-btn, .edit-btn { font-size:11px; padding:6px 10px; }
             .status-ok, .status-low { font-size:12px; }
+            .checkbox-compra { width:18px; height:18px; }
         }
         
         @media (max-width: 599px) {
-            /* Tablas compactas en móvil */
+            /* Tablas ultra compactas en móvil */
             table { 
                 display:table; 
                 width:100%; 
+                font-size:10px;
             }
             
             th, td {
-                font-size:11px;
-                padding:6px 3px;
+                font-size:10px;
+                padding:5px 2px;
+                line-height:1.2;
             }
             
             /* Columna de acciones fija */
@@ -97,17 +100,27 @@
                 right: 0; 
                 background: white;
                 box-shadow: -2px 0 4px rgba(0,0,0,0.05);
-                padding:6px 4px;
+                padding:5px 3px;
             }
             table th:last-child { background:#f8f9fa; }
             .item-comprado td:last-child { background:#f0f0f0; }
             
-            /* Botones más compactos */
+            /* Botones ultra compactos */
             .edit-btn, .delete-btn { 
                 display:inline-block; 
-                padding:4px 6px;
-                font-size:9px;
+                padding:3px 5px;
+                font-size:8px;
                 margin:1px;
+                line-height:1.2;
+            }
+            
+            .status-ok, .status-low {
+                font-size:9px;
+            }
+            
+            .checkbox-compra {
+                width:14px;
+                height:14px;
             }
         }
     </style>
