@@ -1152,7 +1152,7 @@ service cloud.firestore {
                 productos.forEach(p => {
                     const valorTotal = p.cantidad * p.costoUnitario;
                     const estado = p.cantidad <= p.stockMin ? 
-                        `<span class="status-low">⚠️ Bajo Stock</span>` : 
+                        `<span class="status-low">✅ Disponible</span>` : 
                         `<span class="status-ok">✅ OK</span>`;
 
                     const row = table.insertRow();
@@ -1411,3 +1411,4 @@ service cloud.firestore {
     </script>
 </body>
 </html>
+
