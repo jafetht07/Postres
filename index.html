@@ -42,6 +42,8 @@
         .edit-btn:hover { background:#e0a800; }
         .status-ok { color:#28a745; font-weight:600; }
         .status-low { color:#dc3545; font-weight:600; }
+        .item-comprado { text-decoration: line-through; opacity:0.6; background:#f0f0f0; }
+        .checkbox-compra { width:20px; height:20px; cursor:pointer; }
         .alert { padding:12px; border-radius:8px; margin-bottom:20px; display:none; }
         .alert-success { background:#d4edda; color:#155724; border:1px solid #c3e6cb; }
         .alert-error { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; }
@@ -103,6 +105,7 @@
                 <button class="tab active" onclick="switchTab(event,'cuentas')">📊 Cuentas</button>
                 <button class="tab" onclick="switchTab(event,'inventario')">📦 Inventario</button>
                 <button class="tab" onclick="switchTab(event,'pedidos')">🍰 Pedidos</button>
+                <button class="tab" onclick="switchTab(event,'compras')">🛒 Lista de Compras</button>
             </div>
 
             <div id="cuentasTab" class="tab-content active">
@@ -180,7 +183,7 @@
                         </div>
                         <div class="input-group">
                             <label>Stock Mínimo</label>
-                            <input type="number" id="gastoProductoStockMin" placeholder="2" min="0" step="0.1" value="2" />
+                            <input type="number" id="gastoProductoStockMin" placeholder="5" min="0" step="0.1" value="5" />
                         </div>
                     </div>
                 </div>
@@ -252,7 +255,7 @@
                 </div>
                 <div class="input-group">
                     <label>Stock Mínimo (Alerta)</label>
-                    <input type="number" id="productoStockMin" placeholder="2" min="0" step="0.1" />
+                    <input type="number" id="productoStockMin" placeholder="5" min="0" step="0.1" />
                 </div>
                 <button class="btn" onclick="agregarProducto()">📦 Agregar al Inventario</button>
 
@@ -323,6 +326,81 @@
                     <tbody id="pedidosTable"><tr><td colspan="7" class="loading">Cargando...</td></tr></tbody>
                 </table>
             </div>
+
+            <div id="comprasTab" class="tab-content">
+                <h2>🛒 Lista de Compras</h2>
+                <p style="color:#666; margin-bottom:20px;">Anota aquí lo que necesitas comprar para tu negocio. ¡Nunca olvides un ingrediente!</p>
+
+                <h3>Agregar Item a la Lista</h3>
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>¿Qué necesitas comprar?</label>
+                        <input type="text" id="itemNombre" placeholder="Ej: 2kg de azúcar, Moldes desechables" />
+                    </div>
+                    <div class="input-group">
+                        <label>Cantidad Estimada (Opcional)</label>
+                        <input type="text" id="itemCantidad" placeholder="Ej: 5 unidades, 2kg" />
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Costo Estimado (₡) - Opcional</label>
+                    <input type="number" id="itemCostoEstimado" placeholder="0" min="0" />
+                </div>
+                <div class="input-group">
+                    <label>Categoría</label>
+                    <select id="itemCategoria">
+                        <option value="ingredientes">🥚 Ingredientes</option>
+                        <option value="envases">📦 Envases y Empaques</option>
+                        <option value="decoracion">🎨 Decoración</option>
+                        <option value="herramientas">🔧 Herramientas/Utensilios</option>
+                        <option value="otros">📌 Otros</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Notas adicionales (Opcional)</label>
+                    <input type="text" id="itemNotas" placeholder="Ej: Comprar en el supermercado X, marca Y" />
+                </div>
+                <button class="btn" onclick="agregarItemCompra()">➕ Agregar a la Lista</button>
+
+                <div style="margin:30px 0; padding:15px; background:#f0f8ff; border-radius:10px; border-left:4px solid #667eea;">
+                    <h3 style="color:#667eea; margin-bottom:10px;">💰 Presupuesto Total Estimado</h3>
+                    <div style="font-size:24px; font-weight:bold; color:#667eea;" id="presupuestoTotal">₡0</div>
+                </div>
+
+                <h3 style="margin-top:30px;">📝 Mi Lista de Compras</h3>
+                
+                <div style="margin-bottom:15px;">
+                    <label style="font-weight:600; margin-right:10px;">Filtrar por categoría:</label>
+                    <select id="filtroCategoria" onchange="filtrarListaCompras()" style="padding:8px; border-radius:5px; border:2px solid #e0e0e0;">
+                        <option value="todas">Todas las categorías</option>
+                        <option value="ingredientes">🥚 Ingredientes</option>
+                        <option value="envases">📦 Envases y Empaques</option>
+                        <option value="decoracion">🎨 Decoración</option>
+                        <option value="herramientas">🔧 Herramientas/Utensilios</option>
+                        <option value="otros">📌 Otros</option>
+                    </select>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:40px;">✓</th>
+                            <th>Item</th>
+                            <th>Cantidad</th>
+                            <th>Costo Est.</th>
+                            <th>Categoría</th>
+                            <th>Notas</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="comprasTable"><tr><td colspan="7" class="loading">Cargando...</td></tr></tbody>
+                </table>
+
+                <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+                    <button class="btn" onclick="marcarTodosComprados()" style="flex:1; min-width:200px; background:#28a745;">✅ Marcar Todos como Comprados</button>
+                    <button class="btn btn-secondary" onclick="eliminarComprados()" style="flex:1; min-width:200px;">🗑️ Eliminar Items Comprados</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -346,6 +424,7 @@
 
         window.currentUser = null;
         window.editandoPedidoId = null;
+        window.listaComprasCache = []; // Cache para filtrado
 
         function showErrorHelper(error) {
             const errorContainer = document.getElementById('errorContainer');
@@ -464,6 +543,9 @@ service cloud.firestore {
             if (tab === 'inventario') {
                 loadInventario();
                 updateInventarioStats();
+            }
+            if (tab === 'compras') {
+                loadListaCompras();
             }
         };
 
@@ -714,7 +796,7 @@ service cloud.firestore {
 
         async function loadData() {
             try {
-                await Promise.all([loadGastos(), loadPedidos(), loadIngresos(), loadInventario()]);
+                await Promise.all([loadGastos(), loadPedidos(), loadIngresos(), loadInventario(), loadListaCompras()]);
                 await updateStats();
                 await updateInventarioStats();
             } catch (err) {
@@ -1118,6 +1200,212 @@ service cloud.firestore {
                 document.getElementById('productosLowStock').textContent = productosLowStock;
             } catch (error) {
                 console.error('Error al actualizar stats de inventario:', error);
+            }
+        }
+
+        // ==================== LISTA DE COMPRAS ====================
+
+        window.agregarItemCompra = async () => {
+            const nombre = document.getElementById('itemNombre').value.trim();
+            const cantidad = document.getElementById('itemCantidad').value.trim();
+            const costoEstimado = parseFloat(document.getElementById('itemCostoEstimado').value) || 0;
+            const categoria = document.getElementById('itemCategoria').value;
+            const notas = document.getElementById('itemNotas').value.trim();
+
+            if (!nombre) {
+                alert('⚠️ Por favor escribe qué necesitas comprar');
+                return;
+            }
+
+            try {
+                const itemData = {
+                    userId: window.currentUser.uid,
+                    nombre,
+                    cantidad: cantidad || '-',
+                    costoEstimado,
+                    categoria,
+                    notas: notas || '-',
+                    comprado: false,
+                    fecha: Timestamp.now(),
+                    timestamp: Date.now()
+                };
+
+                await addDoc(collection(db, 'listaCompras'), itemData);
+
+                document.getElementById('itemNombre').value = '';
+                document.getElementById('itemCantidad').value = '';
+                document.getElementById('itemCostoEstimado').value = '';
+                document.getElementById('itemNotas').value = '';
+
+                await loadListaCompras();
+                alert(`✅ Item agregado a tu lista de compras\n📝 ${nombre}`);
+            } catch (error) {
+                console.error('Error al agregar item:', error);
+                showErrorHelper(error);
+                alert('Error al agregar item');
+            }
+        };
+
+        window.marcarComprado = async (id, comprado) => {
+            try {
+                const itemRef = doc(db, 'listaCompras', id);
+                const itemSnap = await getDoc(itemRef);
+                
+                if (!itemSnap.exists()) return;
+
+                await setDoc(itemRef, {
+                    ...itemSnap.data(),
+                    comprado: comprado
+                });
+
+                await loadListaCompras();
+            } catch (error) {
+                console.error('Error al marcar item:', error);
+                alert('Error al actualizar item');
+            }
+        };
+
+        window.eliminarItemCompra = async (id) => {
+            if (!confirm('¿Eliminar este item de la lista?')) return;
+            try {
+                await deleteDoc(doc(db, 'listaCompras', id));
+                await loadListaCompras();
+                alert('✅ Item eliminado');
+            } catch (error) {
+                console.error('Error al eliminar item:', error);
+                alert('Error al eliminar');
+            }
+        };
+
+        window.marcarTodosComprados = async () => {
+            if (!confirm('¿Marcar todos los items como comprados?')) return;
+            try {
+                const q = query(collection(db, 'listaCompras'), where('userId', '==', window.currentUser.uid), where('comprado', '==', false));
+                const snapshot = await getDocs(q);
+                
+                const promises = [];
+                snapshot.forEach(s => {
+                    const itemRef = doc(db, 'listaCompras', s.id);
+                    promises.push(setDoc(itemRef, { ...s.data(), comprado: true }));
+                });
+
+                await Promise.all(promises);
+                await loadListaCompras();
+                alert('✅ Todos los items marcados como comprados');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al marcar items');
+            }
+        };
+
+        window.eliminarComprados = async () => {
+            if (!confirm('¿Eliminar todos los items comprados de la lista?')) return;
+            try {
+                const q = query(collection(db, 'listaCompras'), where('userId', '==', window.currentUser.uid), where('comprado', '==', true));
+                const snapshot = await getDocs(q);
+                
+                const promises = [];
+                snapshot.forEach(s => {
+                    promises.push(deleteDoc(doc(db, 'listaCompras', s.id)));
+                });
+
+                await Promise.all(promises);
+                await loadListaCompras();
+                alert('✅ Items comprados eliminados');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al eliminar items');
+            }
+        };
+
+        window.filtrarListaCompras = () => {
+            const filtro = document.getElementById('filtroCategoria').value;
+            const table = document.getElementById('comprasTable');
+            table.innerHTML = '';
+
+            let itemsFiltrados = window.listaComprasCache;
+            if (filtro !== 'todas') {
+                itemsFiltrados = window.listaComprasCache.filter(item => item.categoria === filtro);
+            }
+
+            if (itemsFiltrados.length === 0) {
+                table.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#999;">No hay items en esta categoría</td></tr>';
+                return;
+            }
+
+            const categoriaEmoji = {
+                'ingredientes': '🥚',
+                'envases': '📦',
+                'decoracion': '🎨',
+                'herramientas': '🔧',
+                'otros': '📌'
+            };
+
+            itemsFiltrados.forEach(item => {
+                const row = table.insertRow();
+                if (item.comprado) row.classList.add('item-comprado');
+                
+                row.innerHTML = `
+                    <td><input type="checkbox" class="checkbox-compra" ${item.comprado ? 'checked' : ''} onchange="marcarComprado('${item.id}', this.checked)" /></td>
+                    <td style="font-weight:600;">${item.nombre}</td>
+                    <td>${item.cantidad}</td>
+                    <td>${item.costoEstimado > 0 ? '₡' + item.costoEstimado.toLocaleString('es-CR') : '-'}</td>
+                    <td>${categoriaEmoji[item.categoria]} ${item.categoria.charAt(0).toUpperCase() + item.categoria.slice(1)}</td>
+                    <td style="font-size:13px; color:#666;">${item.notas}</td>
+                    <td><button class="delete-btn" onclick="eliminarItemCompra('${item.id}')">🗑️</button></td>
+                `;
+            });
+        };
+
+        async function loadListaCompras() {
+            try {
+                const table = document.getElementById('comprasTable');
+                table.innerHTML = '<tr><td colspan="7" class="loading">Cargando...</td></tr>';
+
+                let snapshot;
+                try {
+                    const q = query(collection(db, 'listaCompras'), where('userId', '==', window.currentUser.uid), orderBy('timestamp', 'desc'));
+                    snapshot = await getDocs(q);
+                } catch (err) {
+                    console.warn('OrderBy falló para lista de compras, cargando sin ordenar.', err);
+                    const q = query(collection(db, 'listaCompras'), where('userId', '==', window.currentUser.uid));
+                    snapshot = await getDocs(q);
+                }
+
+                table.innerHTML = '';
+                if (!snapshot || snapshot.empty) {
+                    table.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#999;">📝 No hay items en tu lista de compras</td></tr>';
+                    window.listaComprasCache = [];
+                    document.getElementById('presupuestoTotal').textContent = '₡0';
+                    return;
+                }
+
+                const items = [];
+                let presupuestoTotal = 0;
+
+                snapshot.forEach(s => {
+                    const item = { id: s.id, ...s.data() };
+                    items.push(item);
+                    if (!item.comprado && item.costoEstimado > 0) {
+                        presupuestoTotal += item.costoEstimado;
+                    }
+                });
+
+                items.sort((a, b) => {
+                    if (a.comprado !== b.comprado) return a.comprado ? 1 : -1;
+                    return (b.timestamp || 0) - (a.timestamp || 0);
+                });
+
+                window.listaComprasCache = items;
+                document.getElementById('presupuestoTotal').textContent = '₡' + presupuestoTotal.toLocaleString('es-CR');
+                document.getElementById('filtroCategoria').value = 'todas';
+                
+                filtrarListaCompras();
+            } catch (error) {
+                console.error('Error al cargar lista de compras:', error);
+                showErrorHelper(error);
+                const table = document.getElementById('comprasTable');
+                table.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#dc3545;padding:20px;">Error al cargar lista de compras</td></tr>';
             }
         }
     </script>
