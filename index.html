@@ -2,170 +2,54 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Gestión de Postres</title>
-    <meta name="theme-color" content="#667eea">
     <style>
-        /* Base */
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body { height: 100%; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg,#667eea 0%,#764ba2 100%); min-height:100vh; -webkit-font-smoothing:antialiased; color:#222; }
-        a { color: inherit; }
-
-        /* Layout container */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg,#667eea 0%,#764ba2 100%); min-height:100vh; }
         .container { max-width:1200px; margin:0 auto; padding:20px; }
-
-        /* LOGIN / REGISTER */
-        .login-container { display:flex; justify-content:center; align-items:center; min-height:100vh; padding: 16px; }
-        .login-box {
-            background:white;
-            padding:28px;
-            border-radius:14px;
-            box-shadow:0 10px 30px rgba(0,0,0,0.22);
-            width:100%;
-            max-width:420px;
-        }
-        .login-box h2 { color:#667eea; margin-bottom:18px; text-align:center; font-size:20px; }
-        .input-group { margin-bottom:14px; }
-        .input-group label { display:block; margin-bottom:6px; color:#333; font-weight:600; font-size:13px; }
-        .input-group input, .input-group select {
-            width:100%;
-            padding:12px 14px;
-            border:2px solid #e6e6e6;
-            border-radius:10px;
-            font-size:15px;
-            transition:border-color .18s, box-shadow .18s;
-        }
-        .input-group input:focus, .input-group select:focus { outline:none; border-color:#667eea; box-shadow:0 6px 18px rgba(102,126,234,0.08); }
-
-        .btn {
-            width:100%;
-            padding:14px;
-            background:#667eea;
-            color:white;
-            border:none;
-            border-radius:10px;
-            font-size:16px;
-            font-weight:700;
-            cursor:pointer;
-            transition:background .18s, transform .06s;
-        }
-        .btn:active { transform:translateY(1px); }
+        .login-container { display:flex; justify-content:center; align-items:center; min-height:100vh; }
+        .login-box { background:white; padding:40px; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.3); width:100%; max-width:400px; }
+        .login-box h2 { color:#667eea; margin-bottom:30px; text-align:center; }
+        .input-group { margin-bottom:20px; }
+        .input-group label { display:block; margin-bottom:5px; color:#333; font-weight:500; }
+        .input-group input, .input-group select { width:100%; padding:12px; border:2px solid #e0e0e0; border-radius:8px; font-size:14px; transition:border-color .3s; }
+        .input-group input:focus, .input-group select:focus { outline:none; border-color:#667eea; }
+        .btn { width:100%; padding:12px; background:#667eea; color:white; border:none; border-radius:8px; font-size:16px; font-weight:600; cursor:pointer; transition:background .3s; }
         .btn:hover { background:#5568d3; }
-
-        .btn-secondary { background:#6c757d; margin-top:8px; }
+        .btn-secondary { background:#6c757d; margin-top:10px; }
         .btn-secondary:hover { background:#5a6268; }
-
-        .alert { padding:12px; border-radius:8px; margin-bottom:12px; display:none; font-size:14px; }
+        .app-container { display:none; }
+        .header { background:white; padding:20px; border-radius:15px; margin-bottom:20px; box-shadow:0 5px 15px rgba(0,0,0,0.1); display:flex; justify-content:space-between; align-items:center; }
+        .header h1 { color:#667eea; }
+        .logout-btn { padding:10px 20px; background:#dc3545; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:600; }
+        .tabs { display:flex; gap:10px; margin-bottom:20px; }
+        .tab { flex:1; padding:15px; background:white; border:none; border-radius:10px; cursor:pointer; font-size:16px; font-weight:600; transition:all .3s; box-shadow:0 3px 10px rgba(0,0,0,0.1); }
+        .tab.active { background:#667eea; color:white; }
+        .tab-content { display:none; background:white; padding:25px; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,0.1); }
+        .tab-content.active { display:block; }
+        .form-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:15px; margin-bottom:20px; }
+        .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:15px; margin-bottom:30px; }
+        .stat-card { background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; padding:20px; border-radius:10px; box-shadow:0 3px 10px rgba(0,0,0,0.1); }
+        .stat-card h3 { font-size:14px; margin-bottom:10px; opacity:0.9; }
+        .stat-card .value { font-size:28px; font-weight:bold; }
+        table { width:100%; border-collapse:collapse; margin-top:20px; }
+        th, td { padding:12px; text-align:left; border-bottom:1px solid #e0e0e0; }
+        th { background:#f8f9fa; font-weight:600; color:#333; }
+        .delete-btn { background:#dc3545; color:white; border:none; padding:5px 12px; border-radius:5px; cursor:pointer; font-size:12px; }
+        .delete-btn:hover { background:#c82333; }
+        .edit-btn { background:#ffc107; color:#333; border:none; padding:5px 12px; border-radius:5px; cursor:pointer; font-size:12px; margin-right:5px; }
+        .edit-btn:hover { background:#e0a800; }
+        .status-ok { color:#28a745; font-weight:600; }
+        .status-low { color:#dc3545; font-weight:600; }
+        .alert { padding:12px; border-radius:8px; margin-bottom:20px; display:none; }
         .alert-success { background:#d4edda; color:#155724; border:1px solid #c3e6cb; }
         .alert-error { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; }
-
-        /* APP */
-        .app-container { display:none; padding-bottom: 80px; } /* bottom padding for mobile comfortable spacing */
-        .header {
-            background:white;
-            padding:14px 16px;
-            border-radius:12px;
-            margin-bottom:14px;
-            box-shadow:0 5px 15px rgba(0,0,0,0.08);
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-        }
-        .header h1 { color:#667eea; font-size:18px; margin:0; }
-        .logout-btn {
-            padding:8px 12px;
-            background:#dc3545;
-            color:white;
-            border:none;
-            border-radius:10px;
-            cursor:pointer;
-            font-weight:700;
-            font-size:14px;
-        }
-
-        .tabs { display:flex; gap:10px; margin-bottom:12px; }
-        .tab {
-            flex:1;
-            padding:10px;
-            background:white;
-            border:none;
-            border-radius:10px;
-            cursor:pointer;
-            font-size:15px;
-            font-weight:700;
-            transition:all .12s;
-            box-shadow:0 3px 10px rgba(0,0,0,0.06);
-        }
-        .tab.active { background:#667eea; color:white; }
-
-        .tab-content { display:none; background:white; padding:18px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.06); }
-        .tab-content.active { display:block; }
-
-        .form-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin-bottom:12px; }
-        .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin-bottom:14px; }
-
-        .stat-card {
-            background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-            color:white;
-            padding:12px;
-            border-radius:10px;
-            box-shadow:0 3px 10px rgba(0,0,0,0.06);
-            min-height:72px;
-            display:flex;
-            flex-direction:column;
-            justify-content:center;
-            gap:6px;
-        }
-        .stat-card h3 { font-size:12px; margin:0; opacity:0.95; font-weight:700; }
-        .stat-card .value { font-size:18px; font-weight:800; }
-
-        /* Tables responsive wrapper */
-        .table-wrap { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; margin-top:8px; }
-        table { width:100%; min-width:700px; border-collapse:collapse; margin-top:6px; }
-        th, td { padding:10px 12px; text-align:left; border-bottom:1px solid #eee; font-size:14px; }
-        th { background:#f8f9fa; font-weight:700; color:#333; font-size:13px; position:relative; }
-        .delete-btn { background:#dc3545; color:white; border:none; padding:8px 10px; border-radius:6px; cursor:pointer; font-size:13px; }
-        .delete-btn:hover { background:#c82333; }
-
-        .loading { text-align:center; padding:16px; color:#666; }
-
-        .error-box { background:#fff3cd; border:2px solid #ffc107; padding:12px; border-radius:8px; margin:12px 0; font-size:13px; }
-        .error-box h4 { color:#856404; margin-bottom:8px; font-size:15px; }
-        .error-box code { display:block; background:#fff; padding:8px; border-radius:4px; margin-top:8px; font-size:12px; overflow-x:auto; }
-
-        /* Smaller devices adjustments */
-        @media (max-width: 680px) {
-            .container { padding: 12px; }
-            .login-box { padding:18px; border-radius:12px; max-width:420px; }
-            .login-box h2 { font-size:18px; }
-            .input-group input, .input-group select { padding:12px; font-size:15px; }
-            .btn { padding:14px; font-size:16px; border-radius:10px; }
-            .header { padding:12px; border-radius:12px; }
-            .header h1 { font-size:16px; }
-            .logout-btn { padding:8px 10px; font-size:13px; }
-            .tabs { gap:8px; }
-            .tab { padding:10px; font-size:14px; border-radius:10px; }
-            .tab-content { padding:14px; border-radius:12px; }
-            .form-row { grid-template-columns: 1fr; }
-            .stats-grid { grid-template-columns: 1fr; }
-            .stat-card { padding:12px; display:flex; flex-direction:row; align-items:center; justify-content:space-between; }
-            .stat-card h3 { font-size:13px; }
-            .stat-card .value { font-size:18px; }
-            table { min-width:640px; }
-            th, td { padding:10px 8px; font-size:13px; }
-        }
-
-        /* Very small phones */
-        @media (max-width: 420px) {
-            .login-box { padding:14px; }
-            .input-group label { font-size:12px; }
-            .input-group input { padding:10px; font-size:14px; }
-            .btn { padding:12px; font-size:15px; }
-            .header h1 { font-size:15px; }
-            th, td { font-size:12px; padding:8px; }
-            .delete-btn { padding:7px 8px; font-size:12px; }
-        }
+        .hidden { display:none; }
+        .loading { text-align:center; padding:20px; color:#666; }
+        .error-box { background:#fff3cd; border:2px solid #ffc107; padding:15px; border-radius:8px; margin:20px 0; }
+        .error-box h4 { color:#856404; margin-bottom:10px; }
+        .error-box code { display:block; background:#fff; padding:10px; border-radius:4px; margin-top:10px; font-size:12px; overflow-x:auto; }
     </style>
 </head>
 <body>
@@ -217,14 +101,15 @@
 
             <div class="tabs">
                 <button class="tab active" onclick="switchTab(event,'cuentas')">📊 Cuentas</button>
-                <button class="tab" onclick="switchTab(event,'pedidos')">📦 Pedidos</button>
+                <button class="tab" onclick="switchTab(event,'inventario')">📦 Inventario</button>
+                <button class="tab" onclick="switchTab(event,'pedidos')">🍰 Pedidos</button>
             </div>
 
             <div id="cuentasTab" class="tab-content active">
-                <h2 style="font-size:16px; margin-bottom:8px;">Gestión de Cuentas</h2>
+                <h2>Gestión de Cuentas</h2>
 
                 <div class="input-group">
-                    <label>Ver estadísticas por:</label>
+                    <label>Ver estadísticas por: </label>
                     <select id="periodSelect" onchange="updateStats()">
                         <option value="day">Hoy</option>
                         <option value="week">Esta Semana</option>
@@ -232,7 +117,7 @@
                     </select>
                 </div>
 
-                <div class="stats-grid" aria-hidden="false">
+                <div class="stats-grid">
                     <div class="stat-card">
                         <h3>Ingresos</h3>
                         <div class="value" id="totalIngresos">₡0</div>
@@ -251,7 +136,7 @@
                     </div>
                 </div>
 
-                <h3 style="margin-top:6px; font-size:16px;">Registrar Gasto</h3>
+                <h3>Registrar Gasto</h3>
                 <div class="form-row">
                     <div class="input-group">
                         <label>Concepto</label>
@@ -262,33 +147,143 @@
                         <input type="number" id="gastoMonto" placeholder="0" min="0" />
                     </div>
                 </div>
+                <div class="input-group">
+                    <label>
+                        <input type="checkbox" id="gastoEsInventario" onchange="toggleInventarioFields()" style="width:auto;display:inline;margin-right:8px;" />
+                        Este gasto es para inventario (ingredientes, envases, etc.)
+                    </label>
+                </div>
+                
+                <div id="camposInventarioGasto" class="hidden" style="border:2px solid #667eea; padding:15px; border-radius:8px; margin-bottom:15px; background:#f8f9ff;">
+                    <h4 style="color:#667eea; margin-bottom:15px;">📦 Detalles del Producto</h4>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label>Nombre del Producto</label>
+                            <input type="text" id="gastoProductoNombre" placeholder="Ej: Harina, Huevos, Envases" />
+                        </div>
+                        <div class="input-group">
+                            <label>Cantidad</label>
+                            <input type="number" id="gastoProductoCantidad" placeholder="0" min="0" step="0.1" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label>Unidad</label>
+                            <select id="gastoProductoUnidad">
+                                <option value="kg">Kilogramos (kg)</option>
+                                <option value="g">Gramos (g)</option>
+                                <option value="L">Litros (L)</option>
+                                <option value="ml">Mililitros (ml)</option>
+                                <option value="unidad">Unidades</option>
+                                <option value="paquete">Paquetes</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Stock Mínimo</label>
+                            <input type="number" id="gastoProductoStockMin" placeholder="2" min="0" step="0.1" value="2" />
+                        </div>
+                    </div>
+                </div>
+                
                 <button class="btn" onclick="registrarGasto()">💰 Registrar Gasto</button>
 
-                <h3 style="margin-top:12px; font-size:16px;">Historial de Gastos</h3>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr><th>Fecha</th><th>Concepto</th><th>Monto</th><th>Acción</th></tr>
-                        </thead>
-                        <tbody id="gastosTable"><tr><td colspan="4" class="loading">Cargando...</td></tr></tbody>
-                    </table>
+                <h3 style="margin-top:30px;">Historial de Gastos</h3>
+                <table>
+                    <thead>
+                        <tr><th>Fecha</th><th>Concepto</th><th>Monto</th><th>Acción</th></tr>
+                    </thead>
+                    <tbody id="gastosTable"><tr><td colspan="4" class="loading">Cargando...</td></tr></tbody>
+                </table>
+
+                <h3 style="margin-top:30px;">Historial de Ingresos (Pedidos)</h3>
+                <table>
+                    <thead>
+                        <tr><th>Fecha</th><th>Cliente</th><th>Monto</th></tr>
+                    </thead>
+                    <tbody id="ingresosTable"><tr><td colspan="3" class="loading">Cargando...</td></tr></tbody>
+                </table>
+            </div>
+
+            <div id="inventarioTab" class="tab-content">
+                <h2>Control de Inventario</h2>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Productos en Stock</h3>
+                        <div class="value" id="totalProductos">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Valor Total Inventario</h3>
+                        <div class="value" id="valorInventario">₡0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Productos Bajos</h3>
+                        <div class="value" id="productosLowStock">0</div>
+                    </div>
                 </div>
 
-                <h3 style="margin-top:12px; font-size:16px;">Historial de Ingresos (Pedidos)</h3>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr><th>Fecha</th><th>Cliente</th><th>Monto</th></tr>
-                        </thead>
-                        <tbody id="ingresosTable"><tr><td colspan="3" class="loading">Cargando...</td></tr></tbody>
-                    </table>
+                <h3>Agregar Producto al Inventario</h3>
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Nombre del Producto</label>
+                        <input type="text" id="productoNombre" placeholder="Ej: Harina, Huevos, Leche" />
+                    </div>
+                    <div class="input-group">
+                        <label>Cantidad</label>
+                        <input type="number" id="productoCantidad" placeholder="0" min="0" step="0.1" />
+                    </div>
                 </div>
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Unidad</label>
+                        <select id="productoUnidad">
+                            <option value="kg">Kilogramos (kg)</option>
+                            <option value="g">Gramos (g)</option>
+                            <option value="L">Litros (L)</option>
+                            <option value="ml">Mililitros (ml)</option>
+                            <option value="unidad">Unidades</option>
+                            <option value="paquete">Paquetes</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Costo Total (₡)</label>
+                        <input type="number" id="productoCosto" placeholder="0" min="0" />
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Stock Mínimo (Alerta)</label>
+                    <input type="number" id="productoStockMin" placeholder="2" min="0" step="0.1" />
+                </div>
+                <button class="btn" onclick="agregarProducto()">📦 Agregar al Inventario</button>
+
+                <h3 style="margin-top:30px;">Inventario Actual</h3>
+                <table>
+                    <thead>
+                        <tr><th>Producto</th><th>Cantidad</th><th>Costo Unitario</th><th>Valor Total</th><th>Stock Mín.</th><th>Estado</th><th>Acciones</th></tr>
+                    </thead>
+                    <tbody id="inventarioTable"><tr><td colspan="7" class="loading">Cargando...</td></tr></tbody>
+                </table>
+
+                <h3 style="margin-top:30px;">Usar/Consumir Producto</h3>
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Producto</label>
+                        <select id="productoConsumir">
+                            <option value="">Seleccionar producto...</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Cantidad a Consumir</label>
+                        <input type="number" id="cantidadConsumir" placeholder="0" min="0" step="0.1" />
+                    </div>
+                </div>
+                <button class="btn" onclick="consumirProducto()">🔻 Registrar Consumo</button>
             </div>
 
             <div id="pedidosTab" class="tab-content">
-                <h2 style="font-size:16px; margin-bottom:8px;">Gestión de Pedidos</h2>
+                <h2>Gestión de Pedidos</h2>
 
-                <h3 style="font-size:14px;">Nuevo Pedido</h3>
+                <h3>Nuevo Pedido</h3>
                 <div class="form-row">
                     <div class="input-group">
                         <label>Nombre del Cliente</label>
@@ -317,17 +312,16 @@
                     <label>Fecha de Entrega</label>
                     <input type="date" id="fechaEntrega" />
                 </div>
-                <button class="btn" onclick="registrarPedido()">📦 Registrar Pedido</button>
+                <button class="btn" onclick="registrarPedido()" id="btnGuardarPedido">📦 Registrar Pedido</button>
+                <button class="btn btn-secondary hidden" onclick="cancelarEdicionPedido()" id="btnCancelarPedido">Cancelar</button>
 
-                <h3 style="margin-top:12px; font-size:16px;">Pedidos Activos</h3>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr><th>Cliente</th><th>Teléfono</th><th>Postre</th><th>Precio</th><th>Entrega</th><th>Ruta</th><th>Acción</th></tr>
-                        </thead>
-                        <tbody id="pedidosTable"><tr><td colspan="7" class="loading">Cargando...</td></tr></tbody>
-                    </table>
-                </div>
+                <h3 style="margin-top:30px;">Pedidos Activos</h3>
+                <table>
+                    <thead>
+                        <tr><th>Cliente</th><th>Teléfono</th><th>Postre</th><th>Precio</th><th>Entrega</th><th>Ruta</th><th>Acciones</th></tr>
+                    </thead>
+                    <tbody id="pedidosTable"><tr><td colspan="7" class="loading">Cargando...</td></tr></tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -335,7 +329,7 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where, orderBy, Timestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where, orderBy, Timestamp, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyDjwYd8J_9g7kfgluxZFWMKKOn2OoBkmBQ",
@@ -351,6 +345,7 @@
         const db = getFirestore(app);
 
         window.currentUser = null;
+        window.editandoPedidoId = null;
 
         function showErrorHelper(error) {
             const errorContainer = document.getElementById('errorContainer');
@@ -391,7 +386,6 @@ service cloud.firestore {
             }
         }
 
-        // Auth state
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 window.currentUser = user;
@@ -461,64 +455,124 @@ service cloud.firestore {
             setTimeout(() => alertDiv.style.display = 'none', 4000);
         }
 
-        // Fix: accept event param to avoid undefined global event
         window.switchTab = (evt, tab) => {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             if (evt && evt.currentTarget) evt.currentTarget.classList.add('active');
-            const el = document.getElementById(tab + 'Tab');
-            if (el) el.classList.add('active');
-            // fallback: add active to content by id
-            const content = document.getElementById(tab + 'Tab');
-            if (!content) {
-                // previous structure uses id "cuentasTab" / "pedidosTab"
-                const content2 = document.getElementById(tab + 'Tab');
-            }
-            // proper content show:
-            const contentId = tab + 'Tab';
-            const contentElem = document.getElementById(contentId);
-            if (contentElem) contentElem.classList.add('active');
-            // Show by known ids
-            if (tab === 'cuentas') {
-                document.getElementById('cuentasTab').classList.add('active');
-                document.getElementById('pedidosTab').classList.remove('active');
-                updateStats();
-            } else if (tab === 'pedidos') {
-                document.getElementById('pedidosTab').classList.add('active');
-                document.getElementById('cuentasTab').classList.remove('active');
+            document.getElementById(tab + 'Tab').classList.add('active');
+            if (tab === 'cuentas') updateStats();
+            if (tab === 'inventario') {
+                loadInventario();
+                updateInventarioStats();
             }
         };
 
-        // Registrar gasto
+        window.toggleInventarioFields = () => {
+            const checkbox = document.getElementById('gastoEsInventario');
+            const campos = document.getElementById('camposInventarioGasto');
+            if (checkbox.checked) {
+                campos.classList.remove('hidden');
+            } else {
+                campos.classList.add('hidden');
+            }
+        };
+
         window.registrarGasto = async () => {
             const concepto = document.getElementById('gastoConcepto').value.trim();
             const monto = parseFloat(document.getElementById('gastoMonto').value);
-            if (!concepto || !monto || monto <= 0) { alert('⚠️ Por favor completa todos los campos correctamente'); return; }
+            const esInventario = document.getElementById('gastoEsInventario').checked;
+            
+            if (!concepto || !monto || monto <= 0) { 
+                alert('⚠️ Por favor completa todos los campos correctamente'); 
+                return; 
+            }
 
-            try {
-                const gastoData = {
-                    userId: window.currentUser.uid,
-                    concepto,
-                    monto,
-                    fecha: Timestamp.now(),
-                    timestamp: Date.now()
-                };
-                const docRef = await addDoc(collection(db, 'gastos'), gastoData);
-                document.getElementById('gastoConcepto').value = '';
-                document.getElementById('gastoMonto').value = '';
-                await loadGastos();
-                await updateStats();
-                alert(`✅ Gasto registrado exitosamente\n💰 Monto: ₡${monto.toLocaleString()}\n📝 Concepto: ${concepto}`);
-            } catch (error) {
-                console.error('❌ Error al registrar gasto:', error);
-                showErrorHelper(error);
-                let mensaje = 'Error al registrar gasto';
-                if (error.code === 'permission-denied') mensaje = '🔒 Error de permisos. Revisa el cuadro amarillo arriba con las instrucciones.';
-                alert(mensaje);
+            // Si es inventario, validar campos adicionales
+            if (esInventario) {
+                const nombreProducto = document.getElementById('gastoProductoNombre').value.trim();
+                const cantidad = parseFloat(document.getElementById('gastoProductoCantidad').value);
+                const unidad = document.getElementById('gastoProductoUnidad').value;
+                const stockMin = parseFloat(document.getElementById('gastoProductoStockMin').value) || 5;
+
+                if (!nombreProducto || !cantidad || cantidad <= 0) {
+                    alert('⚠️ Por favor completa los detalles del producto para inventario');
+                    return;
+                }
+
+                try {
+                    // Registrar gasto
+                    const gastoData = {
+                        userId: window.currentUser.uid,
+                        concepto,
+                        monto,
+                        fecha: Timestamp.now(),
+                        timestamp: Date.now(),
+                        esInventario: true
+                    };
+                    await addDoc(collection(db, 'gastos'), gastoData);
+
+                    // Agregar al inventario
+                    const productoData = {
+                        userId: window.currentUser.uid,
+                        nombre: nombreProducto,
+                        cantidad,
+                        unidad,
+                        costoTotal: monto,
+                        costoUnitario: monto / cantidad,
+                        stockMin,
+                        fecha: Timestamp.now(),
+                        timestamp: Date.now()
+                    };
+                    await addDoc(collection(db, 'inventario'), productoData);
+
+                    // Limpiar formulario
+                    document.getElementById('gastoConcepto').value = '';
+                    document.getElementById('gastoMonto').value = '';
+                    document.getElementById('gastoEsInventario').checked = false;
+                    document.getElementById('gastoProductoNombre').value = '';
+                    document.getElementById('gastoProductoCantidad').value = '';
+                    document.getElementById('gastoProductoStockMin').value = '5';
+                    document.getElementById('camposInventarioGasto').classList.add('hidden');
+
+                    await loadGastos();
+                    await loadInventario();
+                    await updateStats();
+                    await updateInventarioStats();
+
+                    alert(`✅ Gasto registrado y producto agregado al inventario\n💰 Monto: ₡${monto.toLocaleString()}\n📝 Concepto: ${concepto}\n📦 Producto: ${nombreProducto} (${cantidad} ${unidad})`);
+                } catch (error) {
+                    console.error('❌ Error al registrar gasto con inventario:', error);
+                    showErrorHelper(error);
+                    alert('Error al registrar. Revisa el cuadro amarillo arriba.');
+                }
+            } else {
+                // Gasto normal sin inventario
+                try {
+                    const gastoData = {
+                        userId: window.currentUser.uid,
+                        concepto,
+                        monto,
+                        fecha: Timestamp.now(),
+                        timestamp: Date.now(),
+                        esInventario: false
+                    };
+                    await addDoc(collection(db, 'gastos'), gastoData);
+                    
+                    document.getElementById('gastoConcepto').value = '';
+                    document.getElementById('gastoMonto').value = '';
+                    
+                    await loadGastos();
+                    await updateStats();
+                    
+                    alert(`✅ Gasto registrado exitosamente\n💰 Monto: ₡${monto.toLocaleString()}\n📝 Concepto: ${concepto}`);
+                } catch (error) {
+                    console.error('❌ Error al registrar gasto:', error);
+                    showErrorHelper(error);
+                    alert('Error al registrar gasto');
+                }
             }
         };
 
-        // Registrar pedido + crear ingreso
         window.registrarPedido = async () => {
             const nombre = document.getElementById('clienteNombre').value.trim();
             const telefono = document.getElementById('clienteTelefono').value.trim();
@@ -526,25 +580,43 @@ service cloud.firestore {
             const precio = parseFloat(document.getElementById('postrePrecio').value);
             const ruta = document.getElementById('rutaEntrega').value.trim();
             const fechaEntrega = document.getElementById('fechaEntrega').value;
-            if (!nombre || !telefono || !postre || !precio || !ruta || !fechaEntrega || precio <= 0) { alert('⚠️ Por favor completa todos los campos correctamente'); return; }
+            if (!nombre || !telefono || !postre || !precio || !ruta || !fechaEntrega || precio <= 0) { 
+                alert('⚠️ Por favor completa todos los campos correctamente'); 
+                return; 
+            }
 
             try {
-                const pedidoData = {
-                    userId: window.currentUser.uid,
-                    nombre, telefono, postre, precio, ruta, fechaEntrega,
-                    fecha: Timestamp.now(),
-                    timestamp: Date.now()
-                };
-                await addDoc(collection(db, 'pedidos'), pedidoData);
+                if (window.editandoPedidoId) {
+                    const pedidoRef = doc(db, 'pedidos', window.editandoPedidoId);
+                    await setDoc(pedidoRef, {
+                        userId: window.currentUser.uid,
+                        nombre, telefono, postre, precio, ruta, fechaEntrega,
+                        fecha: Timestamp.now(),
+                        timestamp: Date.now()
+                    });
+                    alert(`✅ Pedido actualizado exitosamente`);
+                    window.editandoPedidoId = null;
+                    document.getElementById('btnGuardarPedido').textContent = '📦 Registrar Pedido';
+                    document.getElementById('btnCancelarPedido').classList.add('hidden');
+                } else {
+                    const pedidoData = {
+                        userId: window.currentUser.uid,
+                        nombre, telefono, postre, precio, ruta, fechaEntrega,
+                        fecha: Timestamp.now(),
+                        timestamp: Date.now()
+                    };
+                    await addDoc(collection(db, 'pedidos'), pedidoData);
 
-                const ingresoData = {
-                    userId: window.currentUser.uid,
-                    cliente: nombre,
-                    monto: precio,
-                    fecha: Timestamp.now(),
-                    timestamp: Date.now()
-                };
-                await addDoc(collection(db, 'ingresos'), ingresoData);
+                    const ingresoData = {
+                        userId: window.currentUser.uid,
+                        cliente: nombre,
+                        monto: precio,
+                        fecha: Timestamp.now(),
+                        timestamp: Date.now()
+                    };
+                    await addDoc(collection(db, 'ingresos'), ingresoData);
+                    alert(`✅ Pedido registrado exitosamente\n👤 Cliente: ${nombre}\n🍰 Postre: ${postre}\n💰 Precio: ₡${precio.toLocaleString()}`);
+                }
 
                 document.getElementById('clienteNombre').value = '';
                 document.getElementById('clienteTelefono').value = '';
@@ -556,13 +628,51 @@ service cloud.firestore {
                 await loadPedidos();
                 await loadIngresos();
                 await updateStats();
-
-                alert(`✅ Pedido registrado exitosamente\n👤 Cliente: ${nombre}\n🍰 Postre: ${postre}\n💰 Precio: ₡${precio.toLocaleString()}`);
             } catch (error) {
                 console.error('❌ Error al registrar pedido:', error);
                 showErrorHelper(error);
                 alert('Error al registrar pedido. Revisa la consola y el cuadro amarillo arriba.');
             }
+        };
+
+        window.editarPedido = async (id) => {
+            try {
+                const pedidoRef = doc(db, 'pedidos', id);
+                const pedidoSnap = await getDoc(pedidoRef);
+                if (!pedidoSnap.exists()) {
+                    alert('Pedido no encontrado');
+                    return;
+                }
+                
+                const p = pedidoSnap.data();
+                document.getElementById('clienteNombre').value = p.nombre || '';
+                document.getElementById('clienteTelefono').value = p.telefono || '';
+                document.getElementById('postreNombre').value = p.postre || '';
+                document.getElementById('postrePrecio').value = p.precio || '';
+                document.getElementById('rutaEntrega').value = p.ruta || '';
+                document.getElementById('fechaEntrega').value = p.fechaEntrega || '';
+                
+                window.editandoPedidoId = id;
+                document.getElementById('btnGuardarPedido').textContent = '💾 Guardar Cambios';
+                document.getElementById('btnCancelarPedido').classList.remove('hidden');
+                
+                document.getElementById('pedidosTab').scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error al editar pedido:', error);
+                alert('Error al cargar pedido: ' + error.message);
+            }
+        };
+
+        window.cancelarEdicionPedido = () => {
+            window.editandoPedidoId = null;
+            document.getElementById('btnGuardarPedido').textContent = '📦 Registrar Pedido';
+            document.getElementById('btnCancelarPedido').classList.add('hidden');
+            document.getElementById('clienteNombre').value = '';
+            document.getElementById('clienteTelefono').value = '';
+            document.getElementById('postreNombre').value = '';
+            document.getElementById('postrePrecio').value = '';
+            document.getElementById('rutaEntrega').value = '';
+            document.getElementById('fechaEntrega').value = '';
         };
 
         window.eliminarGasto = async (id) => {
@@ -579,6 +689,18 @@ service cloud.firestore {
         };
 
         window.eliminarPedido = async (id) => {
+            if (!confirm('¿Estás seguro de eliminar este pedido definitivamente?')) return;
+            try {
+                await deleteDoc(doc(db, 'pedidos', id));
+                await loadPedidos();
+                alert('✅ Pedido eliminado');
+            } catch (error) {
+                console.error('Error al eliminar pedido:', error);
+                alert('Error al eliminar: ' + (error.message || error));
+            }
+        };
+
+        window.completarPedido = async (id) => {
             if (!confirm('¿Marcar este pedido como completado?')) return;
             try {
                 await deleteDoc(doc(db, 'pedidos', id));
@@ -590,33 +712,28 @@ service cloud.firestore {
             }
         };
 
-        // Carga inicial
         async function loadData() {
             try {
-                await Promise.all([loadGastos(), loadPedidos(), loadIngresos()]);
+                await Promise.all([loadGastos(), loadPedidos(), loadIngresos(), loadInventario()]);
                 await updateStats();
+                await updateInventarioStats();
             } catch (err) {
                 console.error('Error cargando datos iniciales:', err);
             }
         }
 
-        // Helper: convertir campo fecha (Timestamp|number|missing) a Date
         function toDateSafe(field) {
             if (!field) return null;
-            // Firestore Timestamp
             if (typeof field.toDate === 'function') return field.toDate();
-            // number (ms)
             if (typeof field === 'number') return new Date(field);
-            // string date
             const d = new Date(field);
             return isNaN(d.getTime()) ? null : d;
         }
 
-        // loadGastos
         async function loadGastos() {
             try {
-                const tableBody = document.getElementById('gastosTable');
-                tableBody.innerHTML = '<tr><td colspan="4" class="loading">Cargando...</td></tr>';
+                const table = document.getElementById('gastosTable');
+                table.innerHTML = '<tr><td colspan="4" class="loading">Cargando...</td></tr>';
 
                 let snapshot;
                 try {
@@ -629,9 +746,9 @@ service cloud.firestore {
                     snapshot = await getDocs(q);
                 }
 
-                tableBody.innerHTML = '';
+                table.innerHTML = '';
                 if (!snapshot || snapshot.empty) {
-                    tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:#999;">📝 No hay gastos registrados. ¡Empieza a registrar tus gastos arriba!</td></tr>';
+                    table.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:#999;">📝 No hay gastos registrados. ¡Empieza a registrar tus gastos arriba!</td></tr>';
                     return;
                 }
 
@@ -641,28 +758,26 @@ service cloud.firestore {
 
                 gastos.forEach(g => {
                     const fechaDate = toDateSafe(g.fecha) || new Date(g.timestamp || Date.now());
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
+                    const row = table.insertRow();
+                    row.innerHTML = `
                         <td>${fechaDate.toLocaleDateString('es-CR')}</td>
                         <td>${g.concepto || ''}</td>
                         <td style="font-weight:600;">₡${Number(g.monto || 0).toLocaleString('es-CR')}</td>
                         <td><button class="delete-btn" onclick="eliminarGasto('${g.id}')">🗑️ Eliminar</button></td>
                     `;
-                    tableBody.appendChild(tr);
                 });
             } catch (error) {
                 console.error('❌ Error al cargar gastos:', error);
                 showErrorHelper(error);
-                const tableBody = document.getElementById('gastosTable');
-                tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#dc3545;padding:20px;">Error al cargar gastos. Verifica el cuadro amarillo arriba.</td></tr>';
+                const table = document.getElementById('gastosTable');
+                table.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#dc3545;padding:20px;">Error al cargar gastos. Verifica el cuadro amarillo arriba.</td></tr>';
             }
         }
 
-        // loadPedidos
         async function loadPedidos() {
             try {
-                const tableBody = document.getElementById('pedidosTable');
-                tableBody.innerHTML = '<tr><td colspan="7" class="loading">Cargando...</td></tr>';
+                const table = document.getElementById('pedidosTable');
+                table.innerHTML = '<tr><td colspan="7" class="loading">Cargando...</td></tr>';
 
                 let snapshot;
                 try {
@@ -675,9 +790,9 @@ service cloud.firestore {
                     snapshot = await getDocs(q);
                 }
 
-                tableBody.innerHTML = '';
+                table.innerHTML = '';
                 if (!snapshot || snapshot.empty) {
-                    tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#999;">📦 No hay pedidos pendientes</td></tr>';
+                    table.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#999;">📦 No hay pedidos pendientes</td></tr>';
                     return;
                 }
 
@@ -692,31 +807,33 @@ service cloud.firestore {
 
                 pedidos.forEach(p => {
                     const fechaEntrega = p.fechaEntrega ? new Date(p.fechaEntrega).toLocaleDateString('es-CR') : '-';
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
+                    const row = table.insertRow();
+                    row.innerHTML = `
                         <td>${p.nombre || ''}</td>
                         <td>${p.telefono || ''}</td>
                         <td>${p.postre || ''}</td>
                         <td style="font-weight:600;">₡${Number(p.precio || 0).toLocaleString('es-CR')}</td>
                         <td>${fechaEntrega}</td>
                         <td>${p.ruta || ''}</td>
-                        <td><button class="delete-btn" onclick="eliminarPedido('${p.id}')">✅ Completar</button></td>
+                        <td>
+                            <button class="edit-btn" onclick="editarPedido('${p.id}')">✏️ Editar</button>
+                            <button class="delete-btn" onclick="completarPedido('${p.id}')">✅ Completar</button>
+                            <button class="delete-btn" onclick="eliminarPedido('${p.id}')" style="background:#6c757d;">🗑️</button>
+                        </td>
                     `;
-                    tableBody.appendChild(tr);
                 });
             } catch (error) {
                 console.error('❌ Error al cargar pedidos:', error);
                 showErrorHelper(error);
-                const tableBody = document.getElementById('pedidosTable');
-                tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#dc3545;padding:20px;">Error al cargar pedidos. Verifica el cuadro amarillo arriba.</td></tr>';
+                const table = document.getElementById('pedidosTable');
+                table.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#dc3545;padding:20px;">Error al cargar pedidos. Verifica el cuadro amarillo arriba.</td></tr>';
             }
         }
 
-        // loadIngresos
         async function loadIngresos() {
             try {
-                const tableBody = document.getElementById('ingresosTable');
-                tableBody.innerHTML = '<tr><td colspan="3" class="loading">Cargando...</td></tr>';
+                const table = document.getElementById('ingresosTable');
+                table.innerHTML = '<tr><td colspan="3" class="loading">Cargando...</td></tr>';
 
                 let snapshot;
                 try {
@@ -729,9 +846,9 @@ service cloud.firestore {
                     snapshot = await getDocs(q);
                 }
 
-                tableBody.innerHTML = '';
+                table.innerHTML = '';
                 if (!snapshot || snapshot.empty) {
-                    tableBody.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:20px;color:#999;">💰 No hay ingresos registrados</td></tr>';
+                    table.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:20px;color:#999;">💰 No hay ingresos registrados</td></tr>';
                     return;
                 }
 
@@ -741,23 +858,21 @@ service cloud.firestore {
 
                 ingresos.forEach(i => {
                     const fechaDate = toDateSafe(i.fecha) || new Date(i.timestamp || Date.now());
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
+                    const row = table.insertRow();
+                    row.innerHTML = `
                         <td>${fechaDate.toLocaleDateString('es-CR')}</td>
                         <td>${i.cliente || ''}</td>
                         <td style="font-weight:600;color:#28a745;">₡${Number(i.monto || 0).toLocaleString('es-CR')}</td>
                     `;
-                    tableBody.appendChild(tr);
                 });
             } catch (error) {
                 console.error('❌ Error al cargar ingresos:', error);
                 showErrorHelper(error);
-                const tableBody = document.getElementById('ingresosTable');
-                tableBody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#dc3545;padding:20px;">Error al cargar ingresos.</td></tr>';
+                const table = document.getElementById('ingresosTable');
+                table.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#dc3545;padding:20px;">Error al cargar ingresos.</td></tr>';
             }
         }
 
-        // updateStats: calcula totales según periodo (day/week/month)
         window.updateStats = async () => {
             if (!window.currentUser) return;
             const period = document.getElementById('periodSelect').value;
@@ -767,18 +882,16 @@ service cloud.firestore {
             if (period === 'day') {
                 startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
             } else if (period === 'week') {
-                // Semana: lunes como inicio
-                const day = now.getDay(); // 0 (domingo) .. 6 (sábado)
-                const diffToMonday = (day === 0) ? -6 : (1 - day); // si es domingo, retrocede 6 días
+                const day = now.getDay();
+                const diffToMonday = (day === 0) ? -6 : (1 - day);
                 startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diffToMonday, 0, 0, 0, 0);
-            } else { // month
+            } else {
                 startDate = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
             }
 
             const startTs = startDate.getTime();
 
             try {
-                // Gastos
                 let totalGastos = 0;
                 const gastosQ = query(collection(db, 'gastos'), where('userId', '==', window.currentUser.uid));
                 const gastosSnap = await getDocs(gastosQ);
@@ -788,7 +901,6 @@ service cloud.firestore {
                     if (fecha && fecha.getTime() >= startTs) totalGastos += Number(data.monto || 0);
                 });
 
-                // Ingresos
                 let totalIngresos = 0;
                 const ingresosQ = query(collection(db, 'ingresos'), where('userId', '==', window.currentUser.uid));
                 const ingresosSnap = await getDocs(ingresosQ);
@@ -812,6 +924,202 @@ service cloud.firestore {
                 showErrorHelper(error);
             }
         };
+
+        window.agregarProducto = async () => {
+            const nombre = document.getElementById('productoNombre').value.trim();
+            const cantidad = parseFloat(document.getElementById('productoCantidad').value);
+            const unidad = document.getElementById('productoUnidad').value;
+            const costo = parseFloat(document.getElementById('productoCosto').value);
+            const stockMin = parseFloat(document.getElementById('productoStockMin').value) || 5;
+
+            if (!nombre || !cantidad || cantidad <= 0 || !costo || costo <= 0) {
+                alert('⚠️ Por favor completa todos los campos correctamente');
+                return;
+            }
+
+            try {
+                const productoData = {
+                    userId: window.currentUser.uid,
+                    nombre,
+                    cantidad,
+                    unidad,
+                    costoTotal: costo,
+                    costoUnitario: costo / cantidad,
+                    stockMin,
+                    fecha: Timestamp.now(),
+                    timestamp: Date.now()
+                };
+
+                await addDoc(collection(db, 'inventario'), productoData);
+
+                const gastoData = {
+                    userId: window.currentUser.uid,
+                    concepto: `Compra inventario: ${nombre}`,
+                    monto: costo,
+                    fecha: Timestamp.now(),
+                    timestamp: Date.now()
+                };
+                await addDoc(collection(db, 'gastos'), gastoData);
+
+                document.getElementById('productoNombre').value = '';
+                document.getElementById('productoCantidad').value = '';
+                document.getElementById('productoCosto').value = '';
+                document.getElementById('productoStockMin').value = '';
+
+                await loadInventario();
+                await loadGastos();
+                await updateInventarioStats();
+                await updateStats();
+
+                alert(`✅ Producto agregado al inventario\n📦 ${nombre}\n💰 Costo: ₡${costo.toLocaleString()}`);
+            } catch (error) {
+                console.error('Error al agregar producto:', error);
+                showErrorHelper(error);
+                alert('Error al agregar producto');
+            }
+        };
+
+        window.consumirProducto = async () => {
+            const select = document.getElementById('productoConsumir');
+            const productoId = select.value;
+            const cantidadConsumir = parseFloat(document.getElementById('cantidadConsumir').value);
+
+            if (!productoId || !cantidadConsumir || cantidadConsumir <= 0) {
+                alert('⚠️ Selecciona un producto y cantidad válida');
+                return;
+            }
+
+            try {
+                const productoRef = doc(db, 'inventario', productoId);
+                const productoSnap = await getDoc(productoRef);
+                
+                if (!productoSnap.exists()) {
+                    alert('Producto no encontrado');
+                    return;
+                }
+
+                const producto = productoSnap.data();
+                const nuevaCantidad = producto.cantidad - cantidadConsumir;
+
+                if (nuevaCantidad < 0) {
+                    alert(`⚠️ No hay suficiente ${producto.nombre}.\nDisponible: ${producto.cantidad} ${producto.unidad}`);
+                    return;
+                }
+
+                await setDoc(productoRef, {
+                    ...producto,
+                    cantidad: nuevaCantidad
+                });
+
+                document.getElementById('cantidadConsumir').value = '';
+                await loadInventario();
+                await updateInventarioStats();
+
+                if (nuevaCantidad <= producto.stockMin) {
+                    alert(`✅ Consumo registrado\n⚠️ ALERTA: Stock bajo de ${producto.nombre}\nQueda: ${nuevaCantidad} ${producto.unidad}`);
+                } else {
+                    alert(`✅ Consumo registrado\n${producto.nombre}: ${nuevaCantidad} ${producto.unidad} restantes`);
+                }
+            } catch (error) {
+                console.error('Error al consumir producto:', error);
+                alert('Error al registrar consumo');
+            }
+        };
+
+        window.eliminarProducto = async (id) => {
+            if (!confirm('¿Eliminar este producto del inventario?')) return;
+            try {
+                await deleteDoc(doc(db, 'inventario', id));
+                await loadInventario();
+                await updateInventarioStats();
+                alert('✅ Producto eliminado');
+            } catch (error) {
+                console.error('Error al eliminar producto:', error);
+                alert('Error al eliminar');
+            }
+        };
+
+        async function loadInventario() {
+            try {
+                const table = document.getElementById('inventarioTable');
+                const select = document.getElementById('productoConsumir');
+                
+                table.innerHTML = '<tr><td colspan="7" class="loading">Cargando...</td></tr>';
+                select.innerHTML = '<option value="">Seleccionar producto...</option>';
+
+                let snapshot;
+                try {
+                    const q = query(collection(db, 'inventario'), where('userId', '==', window.currentUser.uid), orderBy('timestamp', 'desc'));
+                    snapshot = await getDocs(q);
+                } catch (err) {
+                    console.warn('OrderBy falló para inventario, cargando sin ordenar.', err);
+                    const q = query(collection(db, 'inventario'), where('userId', '==', window.currentUser.uid));
+                    snapshot = await getDocs(q);
+                }
+
+                table.innerHTML = '';
+                if (!snapshot || snapshot.empty) {
+                    table.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#999;">📦 No hay productos en inventario</td></tr>';
+                    return;
+                }
+
+                const productos = [];
+                snapshot.forEach(s => productos.push({ id: s.id, ...s.data() }));
+                productos.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+                productos.forEach(p => {
+                    const valorTotal = p.cantidad * p.costoUnitario;
+                    const estado = p.cantidad <= p.stockMin ? 
+                        `<span class="status-low">⚠️ Bajo Stock</span>` : 
+                        `<span class="status-ok">✅ OK</span>`;
+
+                    const row = table.insertRow();
+                    row.innerHTML = `
+                        <td>${p.nombre}</td>
+                        <td style="font-weight:600;">${p.cantidad} ${p.unidad}</td>
+                        <td>₡${p.costoUnitario.toFixed(2)}</td>
+                        <td style="font-weight:600;">₡${valorTotal.toLocaleString('es-CR')}</td>
+                        <td>${p.stockMin} ${p.unidad}</td>
+                        <td>${estado}</td>
+                        <td><button class="delete-btn" onclick="eliminarProducto('${p.id}')">🗑️</button></td>
+                    `;
+
+                    const option = document.createElement('option');
+                    option.value = p.id;
+                    option.textContent = `${p.nombre} (${p.cantidad} ${p.unidad})`;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error al cargar inventario:', error);
+                showErrorHelper(error);
+                const table = document.getElementById('inventarioTable');
+                table.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#dc3545;padding:20px;">Error al cargar inventario</td></tr>';
+            }
+        }
+
+        async function updateInventarioStats() {
+            try {
+                const q = query(collection(db, 'inventario'), where('userId', '==', window.currentUser.uid));
+                const snapshot = await getDocs(q);
+
+                let totalProductos = 0;
+                let valorTotal = 0;
+                let productosLowStock = 0;
+
+                snapshot.forEach(s => {
+                    const p = s.data();
+                    totalProductos++;
+                    valorTotal += (p.cantidad * p.costoUnitario);
+                    if (p.cantidad <= p.stockMin) productosLowStock++;
+                });
+
+                document.getElementById('totalProductos').textContent = totalProductos;
+                document.getElementById('valorInventario').textContent = '₡' + valorTotal.toLocaleString('es-CR');
+                document.getElementById('productosLowStock').textContent = productosLowStock;
+            } catch (error) {
+                console.error('Error al actualizar stats de inventario:', error);
+            }
+        }
     </script>
 </body>
 </html>
