@@ -255,7 +255,7 @@
                 </div>
                 <div class="input-group">
                     <label>Stock Mínimo (Alerta)</label>
-                    <input type="number" id="productoStockMin" placeholder="5" min="0" step="0.1" />
+                    <input type="number" id="productoStockMin" placeholder="2" min="0" step="0.1" />
                 </div>
                 <button class="btn" onclick="agregarProducto()">📦 Agregar al Inventario</button>
 
@@ -613,7 +613,7 @@ service cloud.firestore {
                     document.getElementById('gastoEsInventario').checked = false;
                     document.getElementById('gastoProductoNombre').value = '';
                     document.getElementById('gastoProductoCantidad').value = '';
-                    document.getElementById('gastoProductoStockMin').value = '5';
+                    document.getElementById('gastoProductoStockMin').value = '2';
                     document.getElementById('camposInventarioGasto').classList.add('hidden');
 
                     await loadGastos();
@@ -1012,7 +1012,7 @@ service cloud.firestore {
             const cantidad = parseFloat(document.getElementById('productoCantidad').value);
             const unidad = document.getElementById('productoUnidad').value;
             const costo = parseFloat(document.getElementById('productoCosto').value);
-            const stockMin = parseFloat(document.getElementById('productoStockMin').value) || 5;
+            const stockMin = parseFloat(document.getElementById('productoStockMin').value) || 2;
 
             if (!nombre || !cantidad || cantidad <= 0 || !costo || costo <= 0) {
                 alert('⚠️ Por favor completa todos los campos correctamente');
