@@ -1454,5 +1454,51 @@ service cloud.firestore {
             }
         }
     </script>
+
+<script>
+// --- Mobile card conversion for three tables ---
+function convertTablesToCards() {
+    if (window.innerWidth > 650) return;
+
+    const targets = [
+        {tableId: "pedidosTable", parentTab: "pedidosTab", title: "🍰 Pedido"},
+        {tableId: "inventarioTable", parentTab: "inventarioTab", title: "📦 Producto"},
+        {tableId: "comprasTable", parentTab: "comprasTab", title: "🛒 Item"}
+    ];
+
+    targets.forEach(cfg => {
+        const table = document.getElementById(cfg.tableId);
+        if (!table) return;
+        const tbody = table;
+        const rows = tbody.querySelectorAll("tr");
+        const tab = document.getElementById(cfg.parentTab);
+        if (!tab) return;
+
+        let list = tab.querySelector(".card-list");
+        if (!list) {
+            list = document.createElement("div");
+            list.className = "card-list";
+            tab.appendChild(list);
+        }
+        list.innerHTML = "";
+
+        rows.forEach(r => {
+            const cells = Array.from(r.children).map(c => c.innerText.trim());
+            if (cells.length < 2) return;
+            const card = document.createElement("div");
+            card.className = "mobile-card";
+            card.innerHTML = `<div class='title'>${cfg.title}</div>`;
+            cells.forEach((txt, i) => {
+                card.innerHTML += `<div class='row'><span class='label'>${i+1}:</span> ${txt}</div>`;
+            });
+            list.appendChild(card);
+        });
+
+        table.style.display = "none";
+    });
+}
+window.addEventListener('load', () => setTimeout(convertTablesToCards, 1500));
+</script>
+
 </body>
 </html>
