@@ -1,7 +1,7 @@
 # Gestión de Postres
 > Panel para administrar las cuentas, el inventario, los pedidos y las compras de un emprendimiento de postres.
 
-## 🇪🇸 Español
+## Español
 
 ### ¿Qué es?
 
@@ -85,7 +85,7 @@ No se usa `localStorage`: la fuente de verdad es Firestore. Solo se mantiene una
 
 ---
 
-## 🇬🇧 English
+## English
 
 ### What is it?
 
